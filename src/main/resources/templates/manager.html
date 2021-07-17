@@ -5,13 +5,14 @@
     <title>Manager History</title>
 </head>
 <body>
+
 <table border="1">
     <tr>
         <td>SeasonName</td>
         <td>TotalPoints</td>
         <td>Rank</td>
     </tr>
-    <tr th:each="managerPastHistory : ${managerHistory.getPast()}">
+    <tr th:each="managerPastHistory : ${MANGER_HISTORY.getPast()}">
         <td th:text="${managerPastHistory.getSeason_name()}">SeasonName</td>
         <td th:text="${managerPastHistory.getTotal_points()}">TotalPoints</td>
         <td th:text="${managerPastHistory.getRank()}">Rank</td>
