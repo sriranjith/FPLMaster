@@ -11,23 +11,24 @@ import org.springframework.web.client.RestTemplate;
 public class FPLRestService {
 
     private final RestTemplate restTemplate;
+    private String url = "https://fantasy.premierleague.com/api";
 
     public FPLRestService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
     public ManagerHistory getManagerHistory(long managerId) {
-        String url = "https://fantasy.premierleague.com/api/entry/{managerId}/history/";
+        url += "/entry/{managerId}/history/";
         return this.restTemplate.getForObject(url, ManagerHistory.class, managerId);
     }
 
     public ManagerInfo getManagerInfo(long managerId) {
-        String url = "https://fantasy.premierleague.com/api/entry/{managerId}/";
+        url += "/entry/{managerId}/";
         return this.restTemplate.getForObject(url, ManagerInfo.class, managerId);
     }
 
     public LeagueStanding getLeagueStanding(long leagueId) {
-        String url = "https://fantasy.premierleague.com/api/leagues-classic/{leagueId}/standings";
+        url += "/leagues-classic/{leagueId}/standings";
         return this.restTemplate.getForObject(url, LeagueStanding.class, leagueId);
     }
 }
