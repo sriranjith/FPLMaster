@@ -1,7 +1,6 @@
 package com.fpl.fplmaster.controller;
 
 import com.fpl.fplmaster.common.ControllerConstants;
-import com.fpl.fplmaster.common.ModelAttributes;
 import com.fpl.fplmaster.service.FPLRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,8 +21,8 @@ public class ManagerController {
 
     @GetMapping("/history")
     public String getManagerHistory(@PathVariable(name = "managerId") long managerId, Model model) {
-        model.addAttribute(ModelAttributes.MANGER_INFO.name(), service.getManagerInfo(managerId));
-        model.addAttribute(ModelAttributes.MANGER_HISTORY.name(), service.getManagerHistory(managerId));
+        //model.addAttribute(ModelAttributes.MANGER_INFO.name(), service.getManagerInfo(managerId));
+        //model.addAttribute(ModelAttributes.MANGER_HISTORY.name(), service.getManagerHistory(managerId));
         return ControllerConstants.MANAGER.name();
     }
 }

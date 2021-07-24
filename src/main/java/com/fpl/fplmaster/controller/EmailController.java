@@ -1,4 +1,4 @@
-package com.fpl.fplmaster.controller.rest;
+package com.fpl.fplmaster.controller;
 
 import com.fpl.fplmaster.email.EmailHandler;
 import com.fpl.fplmaster.model.Email;

@@ -1,9 +1,10 @@
 package com.fpl.fplmaster.service;
 
-import com.fpl.fplmaster.model.LeagueStanding;
-import com.fpl.fplmaster.model.ManagerHistory;
-import com.fpl.fplmaster.model.ManagerInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,24 +12,47 @@ import org.springframework.web.client.RestTemplate;
 public class FPLRestService {
 
     private final RestTemplate restTemplate;
-    private String url = "https://fantasy.premierleague.com/api";
+    private static final String DOMAIN = "https://fantasy.premierleague.com/api";
 
     public FPLRestService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public ManagerHistory getManagerHistory(long managerId) {
-        url += "/entry/{managerId}/history/";
-        return this.restTemplate.getForObject(url, ManagerHistory.class, managerId);
+    public JsonNode getGeneralInfo() throws JsonProcessingException {
+        return get(DOMAIN + "/bootstrap-static/");
     }
 
-    public ManagerInfo getManagerInfo(long managerId) {
-        url += "/entry/{managerId}/";
-        return this.restTemplate.getForObject(url, ManagerInfo.class, managerId);
+    public JsonNode getFixtures() throws JsonProcessingException {
+        return get(DOMAIN + "/fixtures/");
     }
 
-    public LeagueStanding getLeagueStanding(long leagueId) {
-        url += "/leagues-classic/{leagueId}/standings";
-        return this.restTemplate.getForObject(url, LeagueStanding.class, leagueId);
+    public JsonNode getPlayerDetails(String playerId) throws JsonProcessingException {
+        return get(DOMAIN + "/element-summary/{playerId}/", playerId);
+    }
+
+    public JsonNode getLivePlayerStats(String gameWeek) throws JsonProcessingException {
+        return get(DOMAIN + "/event/{gameWeek}/live/", gameWeek);
+    }
+
+    public JsonNode getManagerInfo(String managerId) throws JsonProcessingException {
+        return get(DOMAIN + "/entry/{managerId}/", managerId);
+    }
+
+    public JsonNode getManagerTransfers(String managerId) throws JsonProcessingException {
+        return get(DOMAIN + "entry/{managerId}/transfers/", managerId);
+    }
+
+    public JsonNode getManagerGameWeekSummary(String managerId, String gameWeek) throws JsonProcessingException {
+        return get(DOMAIN + "/entry/{managerId}/event/{gameWeek}/picks/", managerId, gameWeek);
+    }
+
+    public JsonNode getLeagueInfo(String leagueId) throws JsonProcessingException {
+        return get(DOMAIN + "/leagues-classic/{leagueId}/standings/", leagueId);
+    }
+
+    private JsonNode get(String url, String... params) throws JsonProcessingException {
+        ResponseEntity<String> response
+                = restTemplate.getForEntity(url, String.class, params);
+        return new ObjectMapper().readTree(response.getBody());
     }
 }
